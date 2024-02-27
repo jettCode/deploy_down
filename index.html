@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        input[type="text"],
+        select {
+            width: calc(100% - 20px); /* Reduzindo a largura em 20px */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: #ff0000;
+            margin-top: 5px;
+        }
+
+        .thumbnail-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .thumbnail-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Download de Vídeo do YouTube</h1>
+        <form action="/download" method="get">
+            <input type="text" name="url" id="video-url" placeholder="Insira o link do vídeo do YouTube">
+            <select name="quality">
+                <option value="highest">Melhor qualidade disponível</option>
+                <option value="lowest">Pior qualidade disponível</option>
+                <option value="360p">360p</option>
+                <option value="480p">480p</option>
+                <option value="720p">720p</option>
+            </select>
+            <button type="submit">Baixar Vídeo</button>
+        </form>
+        <div class="thumbnail-container" id="thumbnail-container"></div>
+    </div>
+
+    <script>
+        const urlInput = document.getElementById('video-url');
+        const thumbnailContainer = document.getElementById('thumbnail-container');
+
+        urlInput.addEventListener('input', async () => {
+            const videoUrl = urlInput.value;
+            const videoId = getVideoId(videoUrl);
+            if (videoId) {
+                const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                thumbnailContainer.innerHTML = `<img src="${thumbnailUrl}" alt="Thumbnail do vídeo">`;
+            } else {
+                thumbnailContainer.innerHTML = ''; // Limpa a visualização da thumbnail se o link do vídeo for inválido
+            }
+        });
+
+        // Função para extrair o ID do vídeo do link do YouTube
+        function getVideoId(url) {
+            const regex = /[?&]v=([^&]+)/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+    </script>
+</body>
+</html>
